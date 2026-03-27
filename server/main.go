@@ -316,7 +316,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;background:rep
 .r21{grid-template-columns:2fr 1fr;}
 .r11{grid-template-columns:1fr 1fr;}
 .card{background:var(--bg2);border:1px solid var(--bd);border-radius:4px;padding:10px 13px;}
-.chart-card{background:var(--bg2);border:1px solid var(--bd);border-radius:4px;padding:10px 13px;height:160px;display:flex;flex-direction:column;}
+.chart-card{background:var(--bg2);border:1px solid var(--bd);border-radius:4px;padding:10px 13px;height:220px;display:flex;flex-direction:column;}
 .chart-card canvas{flex:1;display:block;width:100%!important;height:0!important;}
 .card-head{font-size:9px;color:#444;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:5px;}
 .blink{width:6px;height:6px;border-radius:50%;background:var(--g);animation:bl 1.2s infinite;}
@@ -394,7 +394,7 @@ canvas{display:block;width:100%!important;}
       <div class="card-head"><div class="blink" style="background:var(--a);"></div>MEMORIA + RED — historial</div>
       <canvas id="chart-mem"></canvas>
     </div>
-    <div class="card" style="height:160px;overflow-y:auto;">
+    <div class="card" style="height:220px;">
       <div class="card-head"><div class="blink" style="background:var(--c);"></div>ESTADO DEL SISTEMA</div>
       <div id="status-grid"></div>
     </div>
