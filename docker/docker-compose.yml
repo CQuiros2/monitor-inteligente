@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+
+  # Servidor central — recibe métricas y detecta anomalías
+  server:
+    build:
+      context: ../server
+      dockerfile: ../docker/Dockerfile.server
+    container_name: monitor-server
+    ports:
+      - "8080:8080"   # Dashboard web
+      - "9000:9000"   # Puerto TCP para agentes
+    networks:
+      - monitor-net
+    restart: unless-stopped
+
+  # Agente de monitoreo — recolecta métricas del sistema host
+  agent:
+    build:
+      context: ../agent
+      dockerfile: ../docker/Dockerfile.agent
+    container_name: monitor-agent
+    environment:
+      - SERVER_ADDR=server:9000
+    # Acceso al /proc del sistema host para leer métricas reales
+    volumes:
+      - /proc:/proc:ro
+    networks:
+      - monitor-net
+    depends_on:
+      - server
+    restart: unless-stopped
+
+networks:
+  monitor-net:
+    driver: bridge
