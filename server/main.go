@@ -310,12 +310,14 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;background:rep
 .stress-btn.start:hover{background:rgba(255,68,68,.3);}
 .stress-btn.stop{background:rgba(57,255,20,.12);color:var(--g);border:1px solid rgba(57,255,20,.35);}
 .stress-btn.stop:hover{background:rgba(57,255,20,.22);}
-.main{flex:1;display:flex;flex-direction:column;padding:10px 14px;gap:9px;overflow:hidden;}
+.main{display:flex;flex-direction:column;padding:10px 14px 10px;gap:9px;}
 .row{display:grid;gap:9px;}
 .r4{grid-template-columns:repeat(4,1fr);}
 .r21{grid-template-columns:2fr 1fr;}
-.r12{grid-template-columns:1fr 2fr;}
+.r11{grid-template-columns:1fr 1fr;}
 .card{background:var(--bg2);border:1px solid var(--bd);border-radius:4px;padding:10px 13px;}
+.chart-card{background:var(--bg2);border:1px solid var(--bd);border-radius:4px;padding:10px 13px;height:160px;display:flex;flex-direction:column;}
+.chart-card canvas{flex:1;display:block;width:100%!important;height:0!important;}
 .card-head{font-size:9px;color:#444;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:5px;}
 .blink{width:6px;height:6px;border-radius:50%;background:var(--g);animation:bl 1.2s infinite;}
 @keyframes bl{0%,100%{opacity:1;}50%{opacity:.2;}}
@@ -377,24 +379,24 @@ canvas{display:block;width:100%!important;}
       <div class="m-sub">activos en el sistema</div>
     </div>
   </div>
-  <div class="row r21" style="flex:1;min-height:0;">
-    <div class="card" style="display:flex;flex-direction:column;">
-      <div class="card-head"><div class="blink"></div>CPU — historial en tiempo real (últimas 60 muestras)</div>
-      <canvas id="chart-cpu" style="flex:1;min-height:0;"></canvas>
+  <div class="row r21">
+    <div class="chart-card">
+      <div class="card-head"><div class="blink"></div>CPU — historial tiempo real</div>
+      <canvas id="chart-cpu"></canvas>
     </div>
-    <div class="card" style="display:flex;flex-direction:column;overflow:hidden;">
+    <div class="card" style="height:160px;overflow:hidden;display:flex;flex-direction:column;">
       <div class="card-head"><div class="blink" style="background:var(--r);"></div>ALERTAS &nbsp;<span id="alert-count" style="color:var(--r);">0</span></div>
       <div id="alerts-list" style="overflow-y:auto;flex:1;"><div class="alert-row"><div style="color:#333;font-size:10px;">Sin alertas detectadas</div></div></div>
     </div>
   </div>
-  <div class="row r12" style="flex:.7;min-height:0;">
-    <div class="card" style="display:flex;flex-direction:column;">
-      <div class="card-head"><div class="blink" style="background:var(--c);"></div>ESTADO DEL SISTEMA</div>
-      <div id="status-grid" style="overflow-y:auto;flex:1;"></div>
-    </div>
-    <div class="card" style="display:flex;flex-direction:column;">
+  <div class="row r11">
+    <div class="chart-card">
       <div class="card-head"><div class="blink" style="background:var(--a);"></div>MEMORIA + RED — historial</div>
-      <canvas id="chart-mem" style="flex:1;min-height:0;"></canvas>
+      <canvas id="chart-mem"></canvas>
+    </div>
+    <div class="card" style="height:160px;overflow-y:auto;">
+      <div class="card-head"><div class="blink" style="background:var(--c);"></div>ESTADO DEL SISTEMA</div>
+      <div id="status-grid"></div>
     </div>
   </div>
 </div>
