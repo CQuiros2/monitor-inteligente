@@ -379,24 +379,26 @@ canvas{display:block;width:100%!important;}
       <div class="m-sub">activos en el sistema</div>
     </div>
   </div>
-  <div class="row r21">
-    <div class="chart-card">
-      <div class="card-head"><div class="blink"></div>CPU — historial tiempo real</div>
-      <canvas id="chart-cpu"></canvas>
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:9px;">
+    <div style="display:flex;flex-direction:column;gap:9px;">
+      <div class="chart-card">
+        <div class="card-head"><div class="blink"></div>CPU — historial tiempo real</div>
+        <canvas id="chart-cpu"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="card-head"><div class="blink" style="background:var(--a);"></div>MEMORIA + RED — historial</div>
+        <canvas id="chart-mem"></canvas>
+      </div>
     </div>
-    <div class="card" style="height:160px;overflow:hidden;display:flex;flex-direction:column;">
-      <div class="card-head"><div class="blink" style="background:var(--r);"></div>ALERTAS &nbsp;<span id="alert-count" style="color:var(--r);">0</span></div>
-      <div id="alerts-list" style="overflow-y:auto;flex:1;"><div class="alert-row"><div style="color:#333;font-size:10px;">Sin alertas detectadas</div></div></div>
-    </div>
-  </div>
-  <div class="row r11">
-    <div class="chart-card">
-      <div class="card-head"><div class="blink" style="background:var(--a);"></div>MEMORIA + RED — historial</div>
-      <canvas id="chart-mem"></canvas>
-    </div>
-    <div class="card" style="height:220px;">
-      <div class="card-head"><div class="blink" style="background:var(--c);"></div>ESTADO DEL SISTEMA</div>
-      <div id="status-grid"></div>
+    <div style="display:grid;grid-template-rows:1fr 1fr;gap:9px;">
+      <div class="card" style="display:flex;flex-direction:column;overflow:hidden;">
+        <div class="card-head"><div class="blink" style="background:var(--r);"></div>ALERTAS &nbsp;<span id="alert-count" style="color:var(--r);">0</span></div>
+        <div id="alerts-list" style="overflow-y:auto;flex:1;"><div class="alert-row"><div style="color:#333;font-size:10px;">Sin alertas detectadas</div></div></div>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;overflow:hidden;">
+        <div class="card-head"><div class="blink" style="background:var(--c);"></div>ESTADO DEL SISTEMA</div>
+        <div id="status-grid" style="overflow-y:auto;flex:1;"></div>
+      </div>
     </div>
   </div>
 </div>
