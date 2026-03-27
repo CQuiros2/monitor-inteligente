@@ -94,23 +94,83 @@ func average(samples []Metrics) (float64, float64) {
 func (d *AnomalyDetector) metricsData() map[string]interface{} {
 	d.mu.Lock()
 	defer d.mu.Unlock()
-	cpuHistory, memHistory, netHistory := []float64{}, []float64{}, []float64{}
+
+	// Merge all hosts into a single combined timeline
+	// Find the longest history and use that as base, overlaying stress-demo on top
+	maxLen := 0
 	for _, host := range d.history {
-		for _, s := range host {
-			cpuHistory = append(cpuHistory, s.CPU)
-			memHistory = append(memHistory, s.Memory)
-			netHistory = append(netHistory, s.Network)
+		if len(host) > maxLen {
+			maxLen = len(host)
+		}
+	}
+
+	cpuHistory := make([]float64, maxLen)
+	memHistory := make([]float64, maxLen)
+	netHistory := make([]float64, maxLen)
+
+	// Fill with real agent data first
+	for hostname, host := range d.history {
+		if hostname == "stress-demo" {
+			continue
+		}
+		offset := maxLen - len(host)
+		for i, s := range host {
+			cpuHistory[offset+i] = s.CPU
+			memHistory[offset+i] = s.Memory
+			netHistory[offset+i] = s.Network
 		}
 		break
 	}
-	latest := map[string]interface{}{"cpu": 0.0, "memory": 0.0, "network": 0.0, "processes": 0, "hostname": "—"}
-	for _, m := range d.latest {
-		latest = map[string]interface{}{
-			"cpu": m.CPU, "memory": m.Memory,
-			"network": m.Network, "processes": m.Processes,
-			"hostname": m.Hostname,
+
+	// Overlay stress-demo data at the end (most recent)
+	if stressHost, ok := d.history["stress-demo"]; ok && len(stressHost) > 0 {
+		offset := maxLen - len(stressHost)
+		if offset < 0 {
+			offset = 0
 		}
-		break
+		for i, s := range stressHost {
+			idx := offset + i
+			if idx < maxLen {
+				cpuHistory[idx] = s.CPU
+				memHistory[idx] = s.Memory
+				netHistory[idx] = s.Network
+			}
+		}
+	}
+
+	// Latest: prefer stress-demo when stressing, otherwise real agent
+	latest := map[string]interface{}{"cpu": 0.0, "memory": 0.0, "network": 0.0, "processes": 0, "hostname": "—"}
+	if d.stressing {
+		if m, ok := d.latest["stress-demo"]; ok {
+			latest = map[string]interface{}{
+				"cpu": m.CPU, "memory": m.Memory,
+				"network": m.Network, "processes": m.Processes,
+				"hostname": m.Hostname,
+			}
+		}
+	} else {
+		for hostname, m := range d.latest {
+			if hostname == "stress-demo" {
+				continue
+			}
+			latest = map[string]interface{}{
+				"cpu": m.CPU, "memory": m.Memory,
+				"network": m.Network, "processes": m.Processes,
+				"hostname": m.Hostname,
+			}
+			break
+		}
+		// fallback to any latest if no real agent
+		if latest["hostname"] == "—" {
+			for _, m := range d.latest {
+				latest = map[string]interface{}{
+					"cpu": m.CPU, "memory": m.Memory,
+					"network": m.Network, "processes": m.Processes,
+					"hostname": m.Hostname,
+				}
+				break
+			}
+		}
 	}
 	recentAlerts := d.alerts
 	if len(recentAlerts) > 8 {
