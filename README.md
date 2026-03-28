@@ -19,6 +19,16 @@ El dashboard web en tiempo real muestra gráficas históricas, panel de alertas 
 
 ---
 
+## 📸 Evidencias
+
+### Estado Normal
+![Dashboard estado normal](docs/dashboard_normal.png)
+
+### Anomalía Detectada (Stress Mode)
+![Dashboard con anomalía detectada](docs/dashboard_stress.png)
+
+---
+
 ## 🏗️ Arquitectura
 
 ```
